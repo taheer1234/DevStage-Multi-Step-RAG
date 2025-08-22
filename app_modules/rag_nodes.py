@@ -10,8 +10,6 @@ from langchain_core.messages import HumanMessage, AIMessage
 
 
 # Defining All Node Names
-# QUESTION_REWRITER_NODE = "question_rewriter_node"
-# QUESTION_CLASSIFIER_NODE = "question_classifier_node"
 OFFTOPIC_NODE = "offtopic"
 RETRIEVER_NODE = "retriever_node"
 CANCEL_RETRIEVAL_NODE = "cancel_node"
@@ -110,7 +108,7 @@ class MultiStepRAGNodes:
             return CANCEL_RETRIEVAL_NODE
         return REPHRASE_QUESTION_NODE
 
-    def cancel_node(self, state: RAGStates):
+    def cancel_node(self):
         """
         This node implements the cancel node. This node simply tells the user
         it couldnt find anything related to thier query in the database.
@@ -118,7 +116,37 @@ class MultiStepRAGNodes:
         print("\nIN CANCEL NODE")
         return {
             "response": model.invoke(
-                "Generate a response to the user telling them the retriever didn't find anything related to what they were asking. DON'T ASK ABOUT WHAT ELSE YOU CAN HELP WITH."
+                "Generate a response to the user telling them the retriever "
+                "didn't find anything related to what they were asking. "
+                "DON'T ASK ABOUT WHAT ELSE YOU CAN HELP WITH."
             ).content,
             "retriever_invoke_number": -3,
+        }
+
+    def rephrase_question_node(self, state: RAGStates):
+        """This node implements the rephrase question node.
+        This node rephrases the rewritten question to make it better
+        able to retrieve information from the vector database."""
+        print("\nIN REPHRASE NODE")
+        response = RQ_chain.invoke(
+            {"query": state["rewritten_query"], "chat_history": state["chat_history"]}
+        ).content
+        print("Rephrased Question: ", response)
+        return {"rewritten_query": response}
+
+    def generate_response_node(self, state: RAGStates):
+        """
+        This node implements the generate response node.
+        This node simply generates a fitting response to the user query
+        using the relevant documents found from the retriever.
+        """
+        print("\nGENERATING RESPONSE")
+        response = GR_chain.invoke(
+            {"document": state["documents"], "query": state["query"]}
+        ).content
+        num = state.get("retriever_invoke_number")
+        return {
+            "response": response,
+            "chat_history": [AIMessage(response)],
+            "retriever_invoke_number": -num,
         }

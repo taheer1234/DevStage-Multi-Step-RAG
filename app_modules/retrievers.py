@@ -6,6 +6,7 @@ import os
 from pinecone.pinecone import Pinecone
 from langchain_pinecone import PineconeVectorStore
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_core.vectorstores import VectorStoreRetriever
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -17,7 +18,9 @@ print("Initialized Embedding Model!")
 pc = Pinecone()
 
 
-def pinecone_mmr_retriever(index_name: str, k: int, lambda_mult: float):
+def pinecone_mmr_retriever(
+    index_name: str, k: int = 5, lambda_mult: float = 0.4
+) -> VectorStoreRetriever:
     """
     This function returns a retriver that uses the
     Pinecone Vector Store and the mmr search type for searching the Vector Store.
@@ -29,7 +32,7 @@ def pinecone_mmr_retriever(index_name: str, k: int, lambda_mult: float):
     )
 
 
-def pinecone_similarity_retriever(index_name: str, k: int):
+def pinecone_similarity_retriever(index_name: str, k: int = 5) -> VectorStoreRetriever:
     """
     This function returns a retriver that uses the
     Pinecone Vector Store and the similarity search type for searching the Vector Store.

@@ -1,0 +1,25 @@
+[project]
+name = "devstage-multi-step-rag"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Taheer Aamir",email = "taheeraamir6282@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "numpy (>=2.3.2,<3.0.0)",
+    "langchain (>=0.3.27,<0.4.0)",
+    "langgraph (>=0.6.6,<0.7.0)",
+    "langchain-groq (>=0.3.7,<0.4.0)",
+    "langsmith (>=0.4.15,<0.5.0)",
+    "langchain-pinecone (>=0.2.11,<0.3.0)",
+    "pinecone (>=7.3.0,<8.0.0)",
+    "langchain-huggingface (>=0.3.1,<0.4.0)",
+    "python-dotenv (>=1.1.1,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

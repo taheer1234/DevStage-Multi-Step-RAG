@@ -1,5 +1,5 @@
 """
-This module contains the Retriever(s) that could be used during the Multi-Step RAG's execution.
+This module contains the Retriever(s) that could be invoked during the Multi-Step RAG's execution.
 """
 
 import os

@@ -95,7 +95,7 @@ RDC_chain = retrieved_doc_classifier_prompt | model.with_structured_output(
 
 
 # REPHRASE QUESTION IMPLEMENTATION
-# The structured output, template, prompt, and chain for the Multi-Step RAG's [Rephrase Question] Node.
+# The template, prompt, and chain for the Multi-Step RAG's [Rephrase Question] Node.
 rephrase_question_template = [
     (
         "system",
@@ -114,3 +114,24 @@ rephrase_question_template = [
 rephrase_question_prompt = ChatPromptTemplate.from_messages(rephrase_question_template)
 
 RQ_chain = rephrase_question_prompt | model
+
+
+# GENERATE RESPONSE IMPLEMENTATION
+# The template, prompt, and chain for the Multi-Step RAG's [Generate Response] Node.
+generate_response_template = [
+    (
+        "system",
+        "Given the user's query and the documents fetched from the RAG retriever. "
+        "Generate a response that satisfies the user's query.\n"
+        "Give a natural response to the user without them knowing a RAG is being used.\n"
+        "Don't say thing like 'in the passage' or related to that. Just give a "
+        "natural response to the user using the info provided, "
+        "but don't mention anything about any provided docs."
+        "Documents fetched from retriever: {document}"
+        "User's query: {query}\n",
+    )
+]
+
+generate_response_prompt = ChatPromptTemplate.from_messages(generate_response_template)
+
+GR_chain = generate_response_prompt | model

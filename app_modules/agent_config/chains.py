@@ -4,7 +4,7 @@ This module contains the Chain(s) that could be invoked during the Multi-Step RA
 
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
-from app_modules.models import model
+from app_modules.agent_config.models import model
 
 # QUESTION REWRITER IMPLEMENTATION
 # The template, prompt, and chain for the Multi-Step RAG's [Question Rewriter] Node.

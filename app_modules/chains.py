@@ -2,24 +2,31 @@
 This module contains the Chain(s) that could be invoked during the Multi-Step RAG's execution.
 """
 
-from models import model
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
+from app_modules.models import model
 
 # QUESTION REWRITER IMPLEMENTATION
 # The template, prompt, and chain for the Multi-Step RAG's [Question Rewriter] Node.
 question_rewriter_template = [
     (
         "system",
-        "YOU ARE AN EXPERT REWRITER. Rewrite the user's question to make it "
-        "more relevant to the context of the chat. The new question you generate"
-        "will be sent to a RAG retriever so make sure your "
-        "question is all encompassing to the context.\n"
-        "Also ENSURE that it is worded in a way that "
-        "makes it good for searching vector databases.\n"
-        "DONT MENTION THE BOOK NAME OR AUTHOR NAME CAUSE THAT IS USELESS!!!\n"
-        "Context: {chat_history}\n"
-        "User's question: {query}",
+        """
+        You are an expert at rewriting questions into the style and language of a 
+        literary work. Rewrite the user’s query so it aligns semantically with how 
+        a novel is written. The rewritten question should feel like it belongs in 
+        the story’s narrative form, with descriptive and context-rich wording.
+
+        - Use the conversation history as context.
+        - Preserve the intent of the user’s query, but phrase it as though it were 
+        expressed within the world of the story.
+        - Make it semantically rich, natural, and aligned with the tone of a book.
+        - Return ONLY the rewritten question as plain text.
+        - Do NOT include prefixes, labels, or explanations.
+
+        Context: {chat_history}
+        User’s question: {query}
+        """,
     )
 ]
 
@@ -99,15 +106,21 @@ RDC_chain = retrieved_doc_classifier_prompt | model.with_structured_output(
 rephrase_question_template = [
     (
         "system",
-        "Using the user query and context. Rephrase the user's "
-        "question to get more information from the RAG retriever, "
-        "relating to what the user wants to know. "
-        "REPHRASE IN A WAY TO BEST GET ALL OF THE RELATED INFO FROM THE RETRIEVER. "
-        "JUST MAKE THE NEW QUERY PHRASED INTO A STATEMENT INSTEAD OF "
-        "A QUESTION THAT COULD GET RELEVANT DOCUMENTS FROM THE RAG.\n"
-        "ALSO DONT MENTION THE BOOK NAME OR AUTHOR NAME CAUSE THAT IS USELESS!!!\n"
-        "User query: {query}"
-        "Context: {chat_history}",
+        """
+        Using the user query and conversation context, rephrase the question to be 
+        more expansive, descriptive, and semantically aligned with the style of a 
+        literary narrative. The goal is to maximize the chance of retrieving 
+        relevant information from the vector database.
+
+        - Make the query broader and richer in detail about the situation.
+        - Ensure the phrasing reflects how events or characters might be described 
+        in a story.
+        - Do NOT include book titles, author names, or metadata.
+        - Return ONLY the rephrased question as plain text.
+
+        User query: {query}
+        Context: {chat_history}
+        """,
     )
 ]
 

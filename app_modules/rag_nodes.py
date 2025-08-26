@@ -2,11 +2,11 @@
 This module contain the Node(s) Class implementation to be used by the Multi-Step RAG's LangGraph.
 """
 
-from rag_states import RAGStates
-from chains import QR_chain, QC_chain, RDC_chain, RQ_chain, GR_chain
-from models import model
-from retrievers import pinecone_mmr_retriever
 from langchain_core.messages import HumanMessage, AIMessage
+from app_modules.rag_states import RAGStates
+from app_modules.chains import QR_chain, QC_chain, RDC_chain, RQ_chain, GR_chain
+from app_modules.models import model
+from app_modules.retrievers import pinecone_mmr_retriever
 
 
 # Defining All Node Names
@@ -57,7 +57,7 @@ class MultiStepRAGNodes:
             return RETRIEVER_NODE
         return OFFTOPIC_NODE
 
-    def offtopic_node(self):
+    def offtopic_node(self, state: RAGStates):
         """
         This node implements the off topic node. This node tells the
         user their query isn't related to the data in the vector database.
@@ -108,7 +108,7 @@ class MultiStepRAGNodes:
             return CANCEL_RETRIEVAL_NODE
         return REPHRASE_QUESTION_NODE
 
-    def cancel_node(self):
+    def cancel_node(self, state: RAGStates):
         """
         This node implements the cancel node. This node simply tells the user
         it couldnt find anything related to thier query in the database.

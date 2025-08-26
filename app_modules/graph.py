@@ -1,9 +1,9 @@
 """This module contsins the class that builds the Multi-Step RAG's LangGraph."""
 
-from rag_nodes import MultiStepRAGNodes
-from rag_states import RAGStates
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
+from app_modules.rag_nodes import MultiStepRAGNodes
+from app_modules.rag_states import RAGStates
 
 # Defining All Node Names
 QUESTION_REWRITER_NODE = "question_rewriter_node"

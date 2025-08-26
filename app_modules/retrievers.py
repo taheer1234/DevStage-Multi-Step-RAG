@@ -19,7 +19,7 @@ pc = Pinecone()
 
 
 def pinecone_mmr_retriever(
-    index_name: str, k: int = 5, lambda_mult: float = 0.4
+    index_name: str, k: int = 10, lambda_mult: float = 0.4
 ) -> VectorStoreRetriever:
     """
     This function returns a retriver that uses the
@@ -32,7 +32,7 @@ def pinecone_mmr_retriever(
     )
 
 
-def pinecone_similarity_retriever(index_name: str, k: int = 5) -> VectorStoreRetriever:
+def pinecone_similarity_retriever(index_name: str, k: int = 10) -> VectorStoreRetriever:
     """
     This function returns a retriver that uses the
     Pinecone Vector Store and the similarity search type for searching the Vector Store.
